@@ -94,7 +94,18 @@
 
   <!-- Hero Section (Atmospheric, Centered, High-Craft Typographic Hierarchy) -->
   <main class="relative z-10">
-    <section class="max-w-5xl mx-auto px-6 pt-28 sm:pt-36 pb-20 text-center">
+
+    <!-- Hero Animated Video Atmosphere -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-[680px] pointer-events-none overflow-hidden z-0 select-none opacity-45 mix-blend-screen">
+      <video autoplay muted loop playsinline class="w-full h-full object-cover">
+        <source src="hero-bg.mp4" type="video/mp4">
+      </video>
+      <!-- Seamless Edge Fades to Pitch Void -->
+      <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-void via-transparent to-void"></div>
+    </div>
+
+    <section class="relative z-10 max-w-5xl mx-auto px-6 pt-28 sm:pt-36 pb-20 text-center">
 
       <!-- Single-Line Master Headline (Minimalist, Cool, High-Impact) -->
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-medium tracking-[-0.035em] text-white leading-tight max-w-4xl mx-auto text-balance">
@@ -134,7 +145,19 @@
     </section>
 
     <!-- SECTION 2: The Inset Live Simulation Deck -->
-    <section id="simulator" class="max-w-5xl mx-auto px-6 pb-28">
+    <section id="simulator" class="max-w-5xl mx-auto px-6 pb-28 scroll-mt-24">
+
+      <!-- Simulation Context & Explanation Header -->
+      <div class="max-w-3xl mb-8">
+        <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Interactive Simulation</div>
+        <h2 class="text-3xl sm:text-4xl font-normal text-white tracking-tight">
+          Live policy evaluation & flight deck
+        </h2>
+        <p class="text-zinc-400 text-sm mt-3 leading-relaxed font-light">
+          Real-time in-browser kinematic physics running our 3.0M converged continuous PPO policy. Watch the autonomous agent calculate retro-propulsive suicide burns to intercept the drifting drone ship, or switch to <span class="text-white font-medium">Manual Pilot</span> to fly using keyboard controls (<kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[10px] border border-zinc-700">▲ Up</kbd> Throttle, <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[10px] border border-zinc-700">◄ / ►</kbd> RCS, <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[10px] border border-zinc-700">R</kbd> Reset).
+        </p>
+      </div>
+
       <div class="rounded-2xl border border-hairlinesubtle bg-surface overflow-hidden shadow-2xl relative">
         
         <!-- Flight Deck Header -->
@@ -249,7 +272,7 @@
     </section>
 
     <!-- SECTION 3: Architectural Schematics & Contact Dynamics -->
-    <section id="dynamics" class="py-24 border-t border-hairline">
+    <section id="dynamics" class="py-24 border-t border-hairline scroll-mt-24">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-14">
@@ -345,7 +368,7 @@
     </section>
 
     <!-- SECTION 4: Prestigious Mathematical Dossier (KaTeX Typesetting) -->
-    <section id="formulas" class="py-24 border-t border-hairline bg-surface/30">
+    <section id="formulas" class="py-24 border-t border-hairline bg-surface/30 scroll-mt-24">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-14">
@@ -426,7 +449,7 @@
     </section>
 
     <!-- SECTION 5: Scientific Telemetry & Empirical Phase Dynamics -->
-    <section id="analytics" class="py-24 border-t border-hairline bg-surface/10">
+    <section id="analytics" class="py-24 border-t border-hairline bg-surface/10 scroll-mt-24">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-14">
@@ -638,7 +661,7 @@
     </section>
 
     <!-- SECTION 6: Policy Evolution Timeline -->
-    <section id="evolution" class="py-24 border-t border-hairline">
+    <section id="evolution" class="py-24 border-t border-hairline scroll-mt-24">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-12">
@@ -709,8 +732,8 @@
       </div>
     </section>
 
-    <!-- SECTION 6: Developer Quickstart -->
-    <section id="quickstart" class="py-24 border-t border-hairline">
+    <!-- SECTION 7: Developer Quickstart -->
+    <section id="quickstart" class="py-24 border-t border-hairline scroll-mt-24">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-10">

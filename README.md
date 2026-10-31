@@ -5,6 +5,7 @@
 **An Autonomous Continuous-Control Rocket Landing Gymnasium Environment & PPO RL Agent**
 
 [![Python Version](https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/Mackming/hoverslam/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Mackming/hoverslam/actions/workflows/ci.yml)
 [![Gymnasium](https://img.shields.io/badge/Gymnasium-v0.29+-blueviolet?style=for-the-badge&logo=openai&logoColor=white)](https://gymnasium.farama.org/)
 [![Stable-Baselines3](https://img.shields.io/badge/Stable--Baselines3-PPO-brightgreen?style=for-the-badge)](https://stable-baselines3.readthedocs.io/)
 [![Pygame](https://img.shields.io/badge/Pygame-Rendering-yellow?style=for-the-badge&logo=python)](https://www.pygame.org/)

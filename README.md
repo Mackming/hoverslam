@@ -46,6 +46,7 @@
   - Restitution-damped ground bounces with impact-asymmetry spin transfer.
   - Foot-pivot mechanics where the rocket rocks on one leg under gravity and RCS torque before settling or toppling.
 - **📊 Real-time Telemetry HUD**: Displays horizontal/vertical velocities, altitude, attitude angle, fuel gauge, throttle meters, and landing gear sensor states.
+- **🌐 Interactive Web Simulator**: An in-browser HTML5 Canvas telemetry flight simulator in `web/` with real-time physics and autopilot demonstration (Vercel-ready).
 - **🎬 Checkpoint Evolution Mode**: Step through training iterations from step 0 to convergence to visualize the policy learning in real-time.
 - **⚡ Automated Benchmarking**: Benchmarks `DummyVecEnv` vs `SubprocVecEnv` on your specific CPU architecture to maximize training throughput.
 
@@ -257,7 +258,13 @@ hoverslam/
 ├── rocket_lander.py             # Gymnasium environment & Pygame rendering
 ├── setup.py                     # Legacy editable install support
 ├── train.py                     # PPO training with auto-benchmarking
-└── watch_agent.py               # AI visualizer & evolution player
+├── vercel.json                  # Zero-config Vercel deployment configuration
+├── watch_agent.py               # AI visualizer & evolution player
+└── web/                         # Interactive web application & telemetry simulator
+    ├── app.js                   # UI controls & evolution scrubber
+    ├── index.html               # Mission control web landing page
+    ├── sim.js                   # Real-time HTML5 canvas physics & autopilot
+    └── style.css                # Avionics design system styling
 ```
 
 ---

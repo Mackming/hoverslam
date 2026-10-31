@@ -15,7 +15,7 @@
   --text-muted: #71717a;
   --accent-star: #38bdf8;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 *, *::before, *::after {
@@ -93,4 +93,17 @@ button:active {
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* KaTeX Mathematical Typesetting */
+.katex-display {
+  margin: 0.3em 0 !important;
+}
+.katex {
+  font-size: 1.02em;
+  color: var(--text-primary);
+  text-rendering: geometricPrecision;
+}
+.katex .mord, .katex .mbin, .katex .mrel, .katex .mop, .katex .mopen, .katex .mclose {
+  color: inherit;
 }

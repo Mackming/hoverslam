@@ -13,10 +13,14 @@
   <meta property="og:url" content="https://github.com/Mackming/hoverslam">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
 
-  <!-- Fonts: Space Grotesk + JetBrains Mono -->
+  <!-- Fonts: Inter (Variable with Optical Sizing) + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for Professional Mathematical Typesetting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <!-- Tailwind CSS Engine + Strict Ink-Neutral Palette -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -33,8 +37,8 @@
             star: '#38bdf8',
           },
           fontFamily: {
-            mono: ['"JetBrains Mono"', 'monospace'],
-            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            display: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
           }
         }
       }
@@ -66,8 +70,8 @@
       <nav class="hidden md:flex items-center gap-8 font-display text-xs text-zinc-400">
         <a href="#simulator" class="hover:text-white transition-colors">Simulation</a>
         <a href="#dynamics" class="hover:text-white transition-colors">Dynamics</a>
-        <a href="#formulas" class="hover:text-white transition-colors">Formulas</a>
-        <a href="#evolution" class="hover:text-white transition-colors">Checkpoints</a>
+        <a href="#formulas" class="hover:text-white transition-colors">Formulations</a>
+        <a href="#evolution" class="hover:text-white transition-colors">Convergence</a>
       </nav>
 
       <!-- Right Action Pills -->
@@ -93,18 +97,18 @@
       <!-- Subtle Eyebrow Pill -->
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-hairline bg-surface font-mono text-[11px] text-zinc-400 mb-8">
         <span class="w-1.5 h-1.5 rounded-full bg-star"></span>
-        <span>Farama Gymnasium &bull; Continuous PPO</span>
+        <span>Farama Gymnasium // Continuous Deep RL</span>
       </div>
 
-      <!-- Two-Tone Master Headline (Inspired by Screenshot 1 & 2) -->
-      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal tracking-tight leading-[1.08] max-w-4xl mx-auto text-balance">
-        <span class="text-zinc-500 block mb-1">The autonomous landing of orbital boosters is</span>
-        <span class="text-white font-medium">physics + intelligence <span class="text-star font-mono text-3xl align-middle">✦</span></span>
+      <!-- Two-Tone Master Headline (Cool, Technical, High-Impact) -->
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-normal tracking-[-0.03em] leading-[1.08] max-w-4xl mx-auto text-balance">
+        <span class="text-zinc-400 block mb-2 font-normal text-3xl sm:text-5xl lg:text-6xl">Autonomous booster recovery.</span>
+        <span class="text-white font-medium">Deep control at the physical limit <span class="text-star font-mono text-3xl align-middle">✦</span></span>
       </h1>
 
       <!-- Understated Subtitle -->
-      <p class="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mt-6 font-display">
-        A continuous-control environment for VTVL rocket recovery with pure-Python kinematics, rocking-block contact dynamics, and deep PPO reinforcement learning.
+      <p class="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mt-6 font-display font-light text-balance">
+        A high-throughput Farama Gymnasium environment for orbital-class VTVL recovery. Simulates rocking-block touchdown mechanics, non-hoverable thrust dynamics (<span class="font-mono text-zinc-300">T/W &gt; 1.0</span>), and moving drone ship platforms for continuous PPO agents.
       </p>
 
       <!-- Minimalist Call to Action Pills -->
@@ -120,17 +124,19 @@
       </div>
 
       <!-- Minimalist Bottom Spec Indicator -->
-      <div class="inline-flex items-center gap-4 text-xs font-mono text-zinc-500 mt-12 py-1.5 px-4 rounded-full border border-hairline bg-surface/50">
-        <span>9-DOF relative state</span>
-        <span>&bull;</span>
-        <span>18,400+ steps/sec</span>
-        <span>&bull;</span>
-        <span>3.0M master policy</span>
+      <div class="inline-flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-zinc-400 mt-12 py-2 px-5 rounded-full border border-hairline bg-surface/60 backdrop-blur-sm">
+        <span>9-DOF Relative State</span>
+        <span class="text-zinc-600">&bull;</span>
+        <span>18,400+ Steps/Sec</span>
+        <span class="text-zinc-600">&bull;</span>
+        <span>Non-Hoverable Regimes</span>
+        <span class="text-zinc-600">&bull;</span>
+        <span>3.0M Converged Policy</span>
       </div>
 
     </section>
 
-    <!-- SECTION 2: The Inset Live Simulation Deck (The First Moment) -->
+    <!-- SECTION 2: The Inset Live Simulation Deck -->
     <section id="simulator" class="max-w-5xl mx-auto px-6 pb-24">
       <div class="rounded-2xl border border-hairlinesubtle bg-surface overflow-hidden shadow-2xl relative">
         
@@ -142,7 +148,7 @@
               Flight Telemetry
             </span>
             <span class="text-zinc-600">/</span>
-            <span id="flight-mode-label" class="text-zinc-300">Autopilot (PPO)</span>
+            <span id="flight-mode-label" class="text-zinc-300">Autopilot (Continuous PPO)</span>
           </div>
 
           <!-- Controls Toggle -->
@@ -165,7 +171,7 @@
             
             <!-- Top HUD Numbers -->
             <div class="flex items-start justify-between">
-              <div class="space-y-1 bg-void/80 backdrop-blur-sm px-3 py-2 rounded-xl border border-hairline tabular-nums">
+              <div class="space-y-1 bg-void/80 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-hairline tabular-nums">
                 <div class="flex items-center gap-3 text-zinc-400 text-[11px]">
                   <span>Altitude:</span>
                   <span id="hud-alt" class="text-white font-medium">480.2 m</span>
@@ -180,7 +186,7 @@
                 </div>
               </div>
 
-              <div class="space-y-1 bg-void/80 backdrop-blur-sm px-3 py-2 rounded-xl border border-hairline text-right tabular-nums">
+              <div class="space-y-1 bg-void/80 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-hairline text-right tabular-nums">
                 <div class="flex items-center justify-between gap-3 text-zinc-400 text-[11px]">
                   <span>Pitch tilt:</span>
                   <span id="hud-pitch" class="text-white font-medium">0.8°</span>
@@ -190,7 +196,7 @@
                   <span class="text-zinc-300">25.6°</span>
                 </div>
                 <div class="flex items-center justify-between gap-3 text-zinc-400 text-[11px]">
-                  <span>Pad drift:</span>
+                  <span>Deck drift:</span>
                   <span id="hud-pad-vx" class="text-white">15.0 m/s</span>
                 </div>
               </div>
@@ -199,12 +205,12 @@
             <!-- Touchdown Notification Pill -->
             <div id="hud-verdict" class="hidden mx-auto py-2 px-6 rounded-full border text-center backdrop-blur-md bg-void/90 border-hairlinesubtle text-white transition-all">
               <div id="hud-verdict-title" class="font-medium text-xs tracking-wide">Touchdown confirmed</div>
-              <div id="hud-verdict-sub" class="text-[10px] text-zinc-400 mt-0.5">0.9 m/s at touch · 0.4° pitch</div>
+              <div id="hud-verdict-sub" class="text-[10px] text-zinc-400 mt-0.5">0.9 m/s at touch · 0.4° pitch · Stable gear settle</div>
             </div>
 
             <!-- Bottom HUD Bar -->
             <div class="flex items-end justify-between">
-              <div class="bg-void/80 backdrop-blur-sm px-3 py-2 rounded-xl border border-hairline space-y-1.5">
+              <div class="bg-void/80 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-hairline space-y-1.5">
                 <div class="flex justify-between text-[10px] text-zinc-400 gap-6">
                   <span>Main throttle</span>
                   <span id="hud-throttle-val" class="text-white tabular-nums">78%</span>
@@ -230,15 +236,15 @@
               Reset launch
             </button>
             <button id="btn-toggle-pad" class="px-3 py-1.5 rounded-full bg-zinc-900 border border-hairline text-zinc-400 hover:text-white transition-all">
-              Pad drift: <span id="label-pad-drift" class="text-white font-medium">ON</span>
+              Drone ship drift: <span id="label-pad-drift" class="text-white font-medium">ON</span>
             </button>
             <button id="btn-toggle-wind" class="px-3 py-1.5 rounded-full bg-zinc-900 border border-hairline text-zinc-400 hover:text-white transition-all">
-              Gusts: <span id="label-wind-gust" class="text-zinc-500">OFF</span>
+              Crosswind shear: <span id="label-wind-gust" class="text-zinc-500">OFF</span>
             </button>
           </div>
 
           <div class="text-zinc-500 text-[11px]">
-            Pure-Python kinematics &bull; 60 FPS RK2
+            Pure-Python Kinematics &bull; 60 Hz Numerical Integration
           </div>
         </div>
 
@@ -250,12 +256,12 @@
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-14">
-          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Simulation Dynamics</div>
+          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Mechanical Dynamics</div>
           <h2 class="text-3xl sm:text-4xl font-normal text-white tracking-tight">
-            The rocking-block contact model
+            The rocking-block touchdown mechanics
           </h2>
-          <p class="text-zinc-400 text-sm mt-3 leading-relaxed">
-            Booster touchdowns are not binary collision boxes. Kinetic impact absorption and rotational stability are governed by separate physical constraints.
+          <p class="text-zinc-400 text-sm mt-3 leading-relaxed font-light">
+            Orbital booster recoveries are not point-mass collisions. Structural stability is governed by non-linear kinetic restitution, foot-planted pivot torque, and geometric tipping boundaries.
           </p>
         </div>
 
@@ -264,7 +270,7 @@
           <!-- Custom Vector Architectural Schematic (Figure 1) -->
           <div class="lg:col-span-6 rounded-2xl border border-hairline bg-surface p-6">
             <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-3 flex justify-between items-center">
-              <span>Figure 1: Stability envelope</span>
+              <span>Figure 1: Stability envelope & pivot dynamics</span>
               <span class="text-zinc-300">&theta;_tip = 25.6°</span>
             </div>
 
@@ -315,23 +321,23 @@
           <!-- Technical Explanations -->
           <div class="lg:col-span-6 space-y-6 text-sm">
             <div>
-              <h3 class="text-white font-medium mb-1">Impact restitution (v &le; 63.0 m/s)</h3>
-              <p class="text-zinc-400 text-xs leading-relaxed font-display">
-                Touchdown energy is not a binary failure. Impacts below 63 m/s reflect with vertical damping coefficient <code class="text-white font-mono">e = 0.4</code> and friction, reproducing realistic rebounds before the vehicle settles flat.
+              <h3 class="text-white font-medium mb-1">Kinetic impact restitution (v &le; 63.0 m/s)</h3>
+              <p class="text-zinc-400 text-xs leading-relaxed font-display font-light">
+                Touchdown energy dissipation is modeled with vertical damping restitution <code class="text-white font-mono">e = 0.4</code> and tangential friction damping, reproducing authentic structural rebound and ground absorption before the gear settles flat.
               </p>
             </div>
 
             <div>
-              <h3 class="text-white font-medium mb-1">Geometric stability limit (&theta;_tip = 25.6°)</h3>
-              <p class="text-zinc-400 text-xs leading-relaxed font-display">
-                Derived directly from the landing gear baseline (22m footprint span, 23m center-of-mass height). Past 25.6°, the center of mass falls outside the footprint polygon, causing an irreversible topple under gravity.
+              <h3 class="text-white font-medium mb-1">Geometric stability boundary (&theta;_tip = 25.6°)</h3>
+              <p class="text-zinc-400 text-xs leading-relaxed font-display font-light">
+                Derived directly from the vehicle's structural baseline: 22m landing gear footprint and 23m center-of-mass height. Beyond 25.6°, the center of gravity falls outside the contact footprint, producing an irreversible overturning moment under gravity.
               </p>
             </div>
 
             <div>
-              <h3 class="text-white font-medium mb-1">Dynamic foot pivoting & RCS authority</h3>
-              <p class="text-zinc-400 text-xs leading-relaxed font-display">
-                When one leg contacts first, the booster pivots on that foot under gravity torque. The agent's side RCS thrusters retain 25% control authority to save marginal tips before the settling timer resolves.
+              <h3 class="text-white font-medium mb-1">Dynamic foot pivoting & cold-gas RCS authority</h3>
+              <p class="text-zinc-400 text-xs leading-relaxed font-display font-light">
+                When the initial leg makes contact, the booster enters a rocking-block state, pivoting about that foot under gravity torque. The agent's RCS thrusters retain full control authority to restore verticality before the settling timer expires.
               </p>
             </div>
           </div>
@@ -341,63 +347,79 @@
       </div>
     </section>
 
-    <!-- SECTION 4: Prestigious Mathematical Dossier -->
+    <!-- SECTION 4: Prestigious Mathematical Dossier (KaTeX Typesetting) -->
     <section id="formulas" class="py-24 border-t border-hairline bg-surface/30">
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-14">
-          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Formulations</div>
+          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Mathematical Specifications</div>
           <h2 class="text-3xl sm:text-4xl font-normal text-white tracking-tight">
-            Guidance & policy mathematics
+            Guidance laws & policy formulations
           </h2>
-          <p class="text-zinc-400 text-sm mt-3 leading-relaxed">
-            Analytical equations governing suicide burn ignition triggers, continuous actor-critic optimization, and potential reward shaping.
+          <p class="text-zinc-400 text-sm mt-3 leading-relaxed font-light">
+            Analytical equations governing the hoverslam ignition threshold, continuous policy optimization, state tensor representation, and potential reward invariance.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <!-- Formula 1: Hoverslam Trigger Gate -->
+          <!-- Formula 1: Hoverslam Suicide Burn Altitude -->
           <div class="rounded-2xl border border-hairline bg-surface p-6 space-y-4">
-            <div class="text-zinc-500 text-[10px] uppercase tracking-wider">01 &bull; Suicide burn trigger altitude</div>
-            <div class="p-4 rounded-xl bg-void border border-hairline text-white text-sm leading-relaxed overflow-x-auto">
-              h_burn = (v_y)&sup2; / (2 &middot; (F_max/m - |g|))
+            <div class="font-mono text-zinc-500 text-[10px] uppercase tracking-wider">01 &bull; Suicide burn ignition altitude</div>
+            
+            <div class="p-5 rounded-xl bg-void border border-hairline text-white overflow-x-auto min-h-[88px] flex items-center">
+              <div class="katex-formula w-full text-center" data-tex="h_{\text{burn}} = \frac{v_y^2}{2 \left(\frac{F_{\max}}{m} - |g|\right)}">
+                <span class="font-mono text-xs text-zinc-400">h_burn = v_y² / [2(F_max/m - |g|)]</span>
+              </div>
             </div>
-            <p class="text-zinc-400 font-display text-xs leading-relaxed">
-              Calculates the exact altitude required for maximum retro-propulsive thrust (126.0 m/s&sup2;) against gravity (45.0 m/s&sup2;) to reach zero vertical velocity at deck level.
+
+            <p class="text-zinc-400 font-display text-xs leading-relaxed font-light">
+              Calculates the exact analytical altitude threshold for retro-propulsive ignition. Decelerates the booster under maximum continuous thrust (<span class="font-mono text-zinc-300">126.0 m/s²</span>) against gravity (<span class="font-mono text-zinc-300">45.0 m/s²</span>) so vertical velocity reaches zero at the precise moment of deck contact.
             </p>
           </div>
 
           <!-- Formula 2: PPO Continuous Objective -->
           <div class="rounded-2xl border border-hairline bg-surface p-6 space-y-4">
-            <div class="text-zinc-500 text-[10px] uppercase tracking-wider">02 &bull; PPO clipped surrogate objective</div>
-            <div class="p-4 rounded-xl bg-void border border-hairline text-white text-sm leading-relaxed overflow-x-auto">
-              L(&theta;) = E_t [ min(r_t &middot; A_t, clip(r_t, 1&plusmn;&epsilon;) &middot; A_t) ]
+            <div class="font-mono text-zinc-500 text-[10px] uppercase tracking-wider">02 &bull; PPO clipped surrogate objective</div>
+            
+            <div class="p-5 rounded-xl bg-void border border-hairline text-white overflow-x-auto min-h-[88px] flex items-center">
+              <div class="katex-formula w-full text-center" data-tex="L^{\text{CLIP}}(\theta) = \hat{\mathbb{E}}_t \left[ \min\left(r_t(\theta) \hat{A}_t, \; \text{clip}(r_t(\theta), 1 \pm \epsilon) \hat{A}_t \right) \right]">
+                <span class="font-mono text-xs text-zinc-400">L(θ) = E_t[min(r_t·A_t, clip(r_t, 1±ε)·A_t)]</span>
+              </div>
             </div>
-            <p class="text-zinc-400 font-display text-xs leading-relaxed">
-              Optimizes a Gaussian policy over two continuous throttle dimensions with variance clipping (&epsilon; = 0.2) to prevent policy collapse under severe angular perturbations.
+
+            <p class="text-zinc-400 font-display text-xs leading-relaxed font-light">
+              Optimizes a continuous bivariate Gaussian policy over main engine throttle and RCS attitude thrusters. First-order clipped surrogate bounds (<span class="font-mono text-zinc-300">&epsilon; = 0.20</span>) prevent destructive policy collapse during aggressive high-angle corrections.
             </p>
           </div>
 
           <!-- Formula 3: 9-DOF Observation Tensor -->
           <div class="rounded-2xl border border-hairline bg-surface p-6 space-y-4">
-            <div class="text-zinc-500 text-[10px] uppercase tracking-wider">03 &bull; 9-Dimensional state tensor</div>
-            <div class="p-4 rounded-xl bg-void border border-hairline text-white text-xs leading-relaxed overflow-x-auto">
-              s_t = [&Delta;x/(W/2), &Delta;y/(H/2), v_x/10, v_y/10, &theta;, &omega;, c_L, c_R, v_pad/10]
+            <div class="font-mono text-zinc-500 text-[10px] uppercase tracking-wider">03 &bull; 9-Dimensional state tensor</div>
+            
+            <div class="p-5 rounded-xl bg-void border border-hairline text-white overflow-x-auto min-h-[88px] flex items-center">
+              <div class="katex-formula w-full text-center" data-tex="\mathbf{s}_t = \left[ \frac{\Delta x}{W/2}, \; \frac{\Delta y}{H/2}, \; \frac{v_x}{10}, \; \frac{v_y}{10}, \; \theta, \; \omega, \; c_L, \; c_R, \; \frac{v_{\text{pad}}}{10} \right]^T">
+                <span class="font-mono text-xs text-zinc-400">s_t = [Δx/(W/2), Δy/(H/2), v_x/10, v_y/10, θ, ω, c_L, c_R, v_pad/10]ᵀ</span>
+              </div>
             </div>
-            <p class="text-zinc-400 font-display text-xs leading-relaxed">
-              Normalized inputs describing vehicle position relative to the moving pad deck, attitude angle, angular rate, landing gear contact flags, and the ship's drift velocity.
+
+            <p class="text-zinc-400 font-display text-xs leading-relaxed font-light">
+              Normalized Markov state vector fed to the actor-critic network, comprising relative booster coordinates, linear velocities, pitch attitude, angular rate, bilateral gear contact sensors, and drone ship drift velocity (<span class="font-mono text-zinc-300">s_t &isin; &reals;<sup>9</sup></span>).
             </p>
           </div>
 
           <!-- Formula 4: Potential Reward Function -->
           <div class="rounded-2xl border border-hairline bg-surface p-6 space-y-4">
-            <div class="text-zinc-500 text-[10px] uppercase tracking-wider">04 &bull; Potential-based reward shaping</div>
-            <div class="p-4 rounded-xl bg-void border border-hairline text-white text-sm leading-relaxed overflow-x-auto">
-              R = &Delta;&Phi; - 0.20&middot;u_main - 0.05&middot;|u_rcs| - 0.10
+            <div class="font-mono text-zinc-500 text-[10px] uppercase tracking-wider">04 &bull; Potential-based reward shaping</div>
+            
+            <div class="p-5 rounded-xl bg-void border border-hairline text-white overflow-x-auto min-h-[88px] flex items-center">
+              <div class="katex-formula w-full text-center" data-tex="R_t = \Delta \Phi(\mathbf{s}) - 0.20 u_{\text{main}} - 0.05 |u_{\text{rcs}}| - 0.10">
+                <span class="font-mono text-xs text-zinc-400">R_t = ΔΦ(s) - 0.20·u_main - 0.05·|u_rcs| - 0.10</span>
+              </div>
             </div>
-            <p class="text-zinc-400 font-display text-xs leading-relaxed">
-              Where &Phi;(s) = -100&middot;&radic;(dx&sup2;+dy&sup2;) - 100&middot;&radic;(vx&sup2;+vy&sup2;) - 100&middot;|&theta;|. Enforces rapid descent via -0.10 step penalty while preserving optimal policy invariance.
+
+            <p class="text-zinc-400 font-display text-xs leading-relaxed font-light">
+              Potential difference <span class="font-mono text-zinc-300">&Delta;&Phi;(s) = &gamma;&Phi;(s<sub>t+1</sub>) - &Phi;(s<sub>t</sub>)</span> guarantees policy invariance (Ng et al., 1999) while guiding exploration toward the moving deck. The <span class="font-mono text-zinc-300">-0.10</span> step penalty forces the agent to execute a fuel-optimal, minimum-duration trajectory.
             </p>
           </div>
 
@@ -411,12 +433,12 @@
       <div class="max-w-5xl mx-auto px-6">
         
         <div class="max-w-2xl mb-12">
-          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Policy Convergence</div>
+          <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Training Convergence</div>
           <h2 class="text-3xl sm:text-4xl font-normal text-white tracking-tight">
-            3,000,000 steps of training
+            3,000,000 steps of policy convergence
           </h2>
-          <p class="text-zinc-400 text-sm mt-3 leading-relaxed">
-            Select a milestone to inspect how control laws evolved from uncoordinated roll into zero-margin touchdown.
+          <p class="text-zinc-400 text-sm mt-3 leading-relaxed font-light">
+            Select a milestone to inspect how control laws evolved from uncoordinated roll into zero-margin touchdown precision.
           </p>
         </div>
 
@@ -425,26 +447,26 @@
           
           <button data-step="100k" class="evo-card p-4 rounded-xl border border-hairline bg-surface hover:bg-raised text-left transition-all">
             <div class="text-zinc-500 text-[10px] mb-1">Phase 1 &bull; 100k steps</div>
-            <div class="text-white font-medium mb-1">Tumbling</div>
-            <div class="text-zinc-400 text-xs font-display">Discovers vertical thrust, but attitude diverges into structural toppling.</div>
+            <div class="text-white font-medium mb-1">Tumbling & divergence</div>
+            <div class="text-zinc-400 text-xs font-display font-light">Discovers vertical thrust, but attitude diverges into rapid structural toppling.</div>
           </button>
 
           <button data-step="500k" class="evo-card p-4 rounded-xl border border-hairline bg-surface hover:bg-raised text-left transition-all">
             <div class="text-zinc-500 text-[10px] mb-1">Phase 2 &bull; 500k steps</div>
-            <div class="text-white font-medium mb-1">Altitude braking</div>
-            <div class="text-zinc-400 text-xs font-display">Learns vertical deceleration curves, but overshoots the moving deck.</div>
+            <div class="text-white font-medium mb-1">Altitude deceleration</div>
+            <div class="text-zinc-400 text-xs font-display font-light">Learns vertical braking curves, but overshoots the moving drone ship deck.</div>
           </button>
 
           <button data-step="1500k" class="evo-card p-4 rounded-xl border border-hairline bg-surface hover:bg-raised text-left transition-all">
             <div class="text-zinc-500 text-[10px] mb-1">Phase 3 &bull; 1.5M steps</div>
-            <div class="text-white font-medium mb-1">Lead intercept</div>
-            <div class="text-zinc-400 text-xs font-display">Tracks moving drone ship by internalizing target drift velocity.</div>
+            <div class="text-white font-medium mb-1">Lead intercept vector</div>
+            <div class="text-zinc-400 text-xs font-display font-light">Tracks moving drone ship by internalizing target drift velocity in the state tensor.</div>
           </button>
 
           <button data-step="3000k" class="evo-card p-4 rounded-xl border border-hairlinesubtle bg-surface hover:bg-raised text-left transition-all active-evo">
             <div class="text-zinc-400 text-[10px] mb-1">Flagship &bull; 3.0M steps</div>
             <div class="text-white font-medium mb-1">Master hoverslam</div>
-            <div class="text-zinc-400 text-xs font-display">Zero-margin suicide burn timing with sub-1 m/s vertical sink rate.</div>
+            <div class="text-zinc-400 text-xs font-display font-light">Zero-margin suicide burn timing with sub-1 m/s vertical sink rate and gear settle.</div>
           </button>
 
         </div>
@@ -455,12 +477,12 @@
             <div>
               <div class="text-zinc-500 text-[10px] uppercase">Touchdown success</div>
               <div id="evo-rate" class="text-2xl font-medium text-white mt-1 tabular-nums">96.8%</div>
-              <div class="text-zinc-500 text-[10px] mt-0.5">Across 100 seeds</div>
+              <div class="text-zinc-500 text-[10px] mt-0.5">Across 100 random seeds</div>
             </div>
             <div>
               <div class="text-zinc-500 text-[10px] uppercase">Sink rate at touch</div>
               <div id="evo-speed" class="text-2xl font-medium text-white mt-1 tabular-nums">1.12 m/s</div>
-              <div class="text-zinc-500 text-[10px] mt-0.5">Threshold: 63 m/s</div>
+              <div class="text-zinc-500 text-[10px] mt-0.5">Structural limit: 63.0 m/s</div>
             </div>
             <div>
               <div class="text-zinc-500 text-[10px] uppercase">Pad tracking speed</div>
@@ -485,13 +507,19 @@
         <div class="max-w-2xl mb-10">
           <div class="font-mono text-xs text-zinc-500 uppercase tracking-wider mb-2">Developer Quickstart</div>
           <h2 class="text-3xl sm:text-4xl font-normal text-white tracking-tight">
-            Run locally in seconds
+            Reproduce locally in three commands
           </h2>
+          <p class="text-zinc-400 text-sm mt-3 leading-relaxed font-light">
+            Train agents from scratch or evaluate pre-trained checkpoints in real-time Gymnasium rendering.
+          </p>
         </div>
 
         <div class="rounded-2xl border border-hairlinesubtle bg-surface p-6 font-mono text-xs shadow-xl space-y-4">
           <div class="flex items-center justify-between text-zinc-500 pb-3 border-b border-hairline">
-            <span>Terminal</span>
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-zinc-700"></span>
+              bash / zsh
+            </span>
             <button onclick="navigator.clipboard.writeText('git clone https://github.com/Mackming/hoverslam.git\ncd hoverslam\npip install -r requirements.txt\npython launcher.py')" class="text-zinc-400 hover:text-white transition-colors">
               Copy all
             </button>

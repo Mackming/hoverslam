@@ -101,4 +101,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // 4. KaTeX Mathematical Typesetting
+  const renderMath = () => {
+    if (typeof window.katex !== "undefined") {
+      document.querySelectorAll(".katex-formula").forEach((el) => {
+        const tex = el.getAttribute("data-tex");
+        if (tex) {
+          try {
+            window.katex.render(tex, el, { displayMode: true, throwOnError: false });
+          } catch (err) {
+            console.error("KaTeX rendering error:", err);
+          }
+        }
+      });
+    }
+  };
+
+  renderMath();
+  window.addEventListener("load", renderMath);
 });

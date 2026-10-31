@@ -1,5 +1,6 @@
 /**
  * HOVERSLAM // UI Interactivity & Control Bindings
+ * Aesthetic: Stark Monochrome + Electric Volt (#d4ff00)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,15 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnAuto && btnManual) {
     btnAuto.addEventListener("click", () => {
       sim.setMode("auto");
-      btnAuto.className = "px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-medium transition-all";
-      btnManual.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white border border-transparent transition-all";
+      btnAuto.className = "px-2.5 py-1 rounded bg-volt text-black font-bold transition-all";
+      btnManual.className = "px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all";
       if (modeLabel) modeLabel.textContent = "AUTOPILOT (PPO)";
     });
 
     btnManual.addEventListener("click", () => {
       sim.setMode("manual");
-      btnManual.className = "px-2.5 py-1 rounded bg-sky-500/20 text-sky-300 border border-sky-500/40 font-medium transition-all";
-      btnAuto.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white border border-transparent transition-all";
+      btnManual.className = "px-2.5 py-1 rounded bg-white text-black font-bold transition-all";
+      btnAuto.className = "px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all";
       if (modeLabel) modeLabel.textContent = "MANUAL PILOT (KEYBOARD)";
     });
   }
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnTogglePad.addEventListener("click", () => {
       const active = sim.togglePadDrift();
       labelPadDrift.textContent = active ? "ON" : "OFF";
-      labelPadDrift.className = active ? "text-emerald-400 font-bold" : "text-slate-400 font-bold";
+      labelPadDrift.className = active ? "text-volt font-bold" : "text-zinc-500 font-bold";
     });
   }
 
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnToggleWind.addEventListener("click", () => {
       const active = sim.toggleWindGusts();
       labelWind.textContent = active ? "ON" : "OFF";
-      labelWind.className = active ? "text-amber-400 font-bold" : "text-slate-400 font-bold";
+      labelWind.className = active ? "text-volt font-bold" : "text-zinc-500 font-bold";
     });
   }
 
@@ -61,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLoadEvo = document.getElementById("btn-load-evo-sim");
 
   const evoData = {
-    "100k": { rate: "12.4%", speed: "18.4 m/s", drift: "0.0 m/s (Lost Pad)", label: "100k Steps (Tumbling)" },
-    "500k": { rate: "48.2%", speed: "6.2 m/s", drift: "5.0 m/s (Overshoot)", label: "500k Steps (Altitude Brake)" },
-    "1500k": { rate: "84.5%", speed: "2.1 m/s", drift: "12.0 m/s (Tracking)", label: "1.5M Steps (Velocity Comp)" },
-    "3000k": { rate: "96.8%", speed: "1.12 m/s", drift: "15.0 m/s (Lead Lock)", label: "3.0M Steps (Flagship Master)" }
+    "100k": { rate: "12.4%", speed: "18.4 m/s", drift: "0.0 m/s (Lost Pad)" },
+    "500k": { rate: "48.2%", speed: "6.2 m/s", drift: "5.0 m/s (Overshoot)" },
+    "1500k": { rate: "84.5%", speed: "2.1 m/s", drift: "12.0 m/s (Tracking)" },
+    "3000k": { rate: "96.8%", speed: "1.12 m/s", drift: "15.0 m/s (Lead Lock)" }
   };
 
   let currentEvoStep = "3000k";
@@ -77,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
       currentEvoStep = step;
 
       evoCards.forEach((c) => {
-        c.classList.remove("active-evo", "border-amber-500/40", "bg-amber-500/[0.06]", "shadow-[0_0_20px_rgba(245,158,11,0.15)]");
-        c.classList.add("border-white/10", "bg-white/[0.02]");
+        c.classList.remove("active-evo", "border-volt", "bg-volt/5", "shadow-volt");
+        c.classList.add("border-zincborder", "bg-surface");
       });
 
-      card.classList.add("active-evo");
-      card.classList.remove("border-white/10", "bg-white/[0.02]");
+      card.classList.add("active-evo", "border-volt", "bg-volt/5", "shadow-volt");
+      card.classList.remove("border-zincborder", "bg-surface");
 
       const d = evoData[step];
       if (evoRate) evoRate.textContent = d.rate;
@@ -113,9 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!targetId) return;
 
       cliTabs.forEach((t) => {
-        t.className = "cli-tab px-3 py-1.5 rounded text-slate-400 hover:text-white";
+        t.className = "cli-tab px-3 py-1.5 rounded text-zinc-400 hover:text-white";
       });
-      tab.className = "cli-tab px-3 py-1.5 rounded bg-white/10 text-white font-medium border border-white/20";
+      tab.className = "cli-tab px-3 py-1.5 rounded bg-zinc-800 text-volt font-bold border border-zinc-700";
 
       cliPanels.forEach((panel) => {
         if (panel.id === targetId) {

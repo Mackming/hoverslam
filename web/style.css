@@ -1,55 +1,100 @@
 /* ==========================================================================
-   HOVERSLAM // AVIONICS DESIGN SYSTEM & CUSTOM EFFECTS
+   HOVERSLAM // STARK MONOCHROME + ELECTRIC VOLT DESIGN SYSTEM
+   Base 1: Obsidian Void (#050507, #0d0e12, #181920)
+   Base 2: Titanium White / Muted Gray (#ffffff, #d4d4d8, #71717a)
+   Accent: Electric Volt (#d4ff00)
    ========================================================================== */
 
 :root {
-  --color-void: #07080c;
-  --color-surface: #0e111a;
-  --color-amber-primary: #f59e0b;
-  --color-sky-avionics: #38bdf8;
-  --color-emerald-nominal: #10b981;
+  --color-void: #050507;
+  --color-surface: #0c0d12;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-bright: rgba(255, 255, 255, 0.18);
+  --color-volt: #d4ff00;
+  --color-volt-glow: rgba(212, 255, 0, 0.25);
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
   background-color: var(--color-void);
-}
-
-/* Background HUD Grid Pattern */
-.bg-hud-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-}
-
-.bg-vignette {
-  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(7, 8, 12, 0.95) 100%);
+  color: #ededed;
+  font-family: var(--font-display);
+  overflow-x: hidden;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #090a0f;
+  background: #050507;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
+  background: #27272a;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--color-volt);
 }
 
-/* Active Evolution State Indicator */
+/* Background Technical Radar Grid */
+.bg-blueprint-grid {
+  background-size: 48px 48px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.bg-radial-vignette {
+  background: radial-gradient(circle at 50% 30%, rgba(212, 255, 0, 0.03) 0%, transparent 60%),
+              radial-gradient(circle at 50% 100%, rgba(5, 5, 7, 0.95) 0%, #050507 100%);
+}
+
+/* Active Evolution Card Glow */
 .active-evo {
-  border-color: rgba(245, 158, 11, 0.6) !important;
-  background-color: rgba(245, 158, 11, 0.08) !important;
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.18);
+  border-color: var(--color-volt) !important;
+  background-color: rgba(212, 255, 0, 0.05) !important;
+  box-shadow: 0 0 25px rgba(212, 255, 0, 0.12) !important;
 }
 
-/* Button Micro-Interactions */
+/* Glowing Volt Accents */
+.text-volt { color: var(--color-volt); }
+.bg-volt { background-color: var(--color-volt); }
+.border-volt { border-color: var(--color-volt); }
+.shadow-volt { box-shadow: 0 0 20px rgba(212, 255, 0, 0.35); }
+
+/* Technical Corner Markers for Cards */
+.tech-corner {
+  position: relative;
+}
+.tech-corner::before,
+.tech-corner::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+.tech-corner::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--color-volt);
+  border-left: 2px solid var(--color-volt);
+}
+.tech-corner::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--color-volt);
+  border-right: 2px solid var(--color-volt);
+}
+
+/* Button & Micro-Interactions */
 button:active {
   transform: translateY(1px);
 }
+
+/* Monospace Utility Overrides */
+.font-mono { font-family: var(--font-mono); }

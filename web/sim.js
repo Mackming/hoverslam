@@ -135,7 +135,8 @@
       return { main: 0.0, side: 0.0 };
     }
 
-    const altitude = sim.y - PAD_HEIGHT;
+    // Altitude measured from bottom of landing gear feet to the drone ship deck surface
+    const altitude = Math.max(0.0, sim.y - FOOT_OFFSET - PAD_HEIGHT);
     const targetX = sim.padX;
 
     if (sim.checkpoint === "100k") {
@@ -158,40 +159,40 @@
     const dvx = sim.vx - targetVx;
 
     let targetAngle = 0.0;
-    if (altitude > 35.0) {
+    if (altitude > 30.0) {
       // Tilt right (positive angle) when dx < 0 to steer right; tilt left when dx > 0
-      targetAngle = Math.max(-0.25, Math.min(0.25, -dx * 0.0035 - dvx * 0.038));
+      targetAngle = Math.max(-0.28, Math.min(0.28, -dx * 0.0035 - dvx * 0.040));
     } else {
-      // Final 35m: enforce vertical touchdown alignment
-      const blend = Math.max(0.0, (altitude - 6.0) / 29.0);
-      targetAngle = Math.max(-0.04, Math.min(0.04, -dx * 0.001 - dvx * 0.02)) * blend;
+      // Final 30m: enforce vertical touchdown alignment while matching deck drift speed
+      const blend = Math.max(0.0, (altitude - 4.0) / 26.0);
+      targetAngle = Math.max(-0.04, Math.min(0.04, -dx * 0.001 - dvx * 0.025)) * blend;
     }
 
     const angleErr = sim.angle - targetAngle;
-    let side = -angleErr * 9.0 - sim.angularVel * 2.8;
+    let side = -angleErr * 9.5 - sim.angularVel * 2.8;
     side = Math.max(-1.0, Math.min(1.0, side));
 
     // Controlled descent rate & final hoverslam deceleration
     const availableDecel = MAIN_ENGINE_POWER - Math.abs(GRAVITY); // 81 m/s^2
     let desiredVy = -32.0;
 
-    if (altitude < 120.0) {
-      // Suicide burn braking curve converging to -1.0 m/s
-      desiredVy = -Math.max(1.0, Math.sqrt(2.0 * availableDecel * 0.78 * Math.max(0.2, altitude - 1.5)));
+    if (altitude < 140.0) {
+      // Suicide burn braking curve converging to -1.0 m/s at altitude 0
+      desiredVy = -Math.max(1.0, Math.sqrt(2.0 * availableDecel * 0.85 * Math.max(0.1, altitude)));
       desiredVy = Math.max(-32.0, desiredVy);
     }
 
-    if (altitude < 10.0) {
-      desiredVy = -1.1;
+    if (altitude < 8.0) {
+      desiredVy = -1.0;
     }
 
     const vyErr = desiredVy - sim.vy;
-    let main = (Math.abs(GRAVITY) + vyErr * 4.2) / MAIN_ENGINE_POWER;
-    main = Math.max(0.12, Math.min(1.0, main));
+    let main = (Math.abs(GRAVITY) + vyErr * 4.5) / MAIN_ENGINE_POWER;
+    main = Math.max(0.10, Math.min(1.0, main));
 
-    if (altitude < 8.0) {
-      if (sim.vy < -1.8) main = 0.92;
-      else if (sim.vy > -0.4) main = 0.18;
+    if (altitude < 6.0) {
+      if (sim.vy < -1.8) main = 0.95;
+      else if (sim.vy > -0.3) main = 0.15;
       else main = (Math.abs(GRAVITY) - 1.0) / MAIN_ENGINE_POWER;
     }
 
@@ -282,9 +283,11 @@
     sim.legLeftContact = footLeftY <= PAD_HEIGHT && onPadLeft;
     sim.legRightContact = footRightY <= PAD_HEIGHT && onPadRight;
 
-    if (footLeftY <= PAD_HEIGHT || footRightY <= PAD_HEIGHT || sim.y <= PAD_HEIGHT) {
+    if (footLeftY <= PAD_HEIGHT || footRightY <= PAD_HEIGHT || (sim.y - FOOT_OFFSET) <= PAD_HEIGHT) {
       sim.grounded = true;
-      const speed = Math.sqrt(sim.vx * sim.vx + sim.vy * sim.vy);
+      const targetPadVx = sim.padDrift ? sim.padVx : 0.0;
+      const relVx = sim.vx - targetPadVx;
+      const speed = Math.sqrt(relVx * relVx + sim.vy * sim.vy);
       const isUpright = Math.abs(sim.angle) <= TIP_ANGLE;
       const isOverDeck = sim.x >= padLeft && sim.x <= padRight;
 
@@ -292,9 +295,9 @@
         sim.landed = true;
         sim.crashed = false;
         sim.vy = 0;
-        sim.vx = 0;
+        sim.vx = targetPadVx;
         sim.angularVel = 0;
-        sim.angle *= 0.2;
+        sim.angle *= 0.15;
         showVerdict(true, speed, sim.angle);
         spawnDustKickup(sim.x, PAD_HEIGHT, 35);
       } else {
@@ -568,7 +571,7 @@
     const elThrottleVal = document.getElementById("hud-throttle-val");
     const elPadVx = document.getElementById("hud-pad-vx");
 
-    const alt = Math.max(0, sim.y - PAD_HEIGHT);
+    const alt = Math.max(0, sim.y - FOOT_OFFSET - PAD_HEIGHT);
     if (elAlt) elAlt.textContent = `${alt.toFixed(1)} m`;
     if (elVy) elVy.textContent = `${sim.vy >= 0 ? "+" : ""}${sim.vy.toFixed(1)} m/s`;
     if (elVx) elVx.textContent = `${sim.vx >= 0 ? "+" : ""}${sim.vx.toFixed(1)} m/s`;

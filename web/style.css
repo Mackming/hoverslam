@@ -70,6 +70,17 @@ body {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
 }
 
+/* Hero Animated Video Atmosphere with Seamless Void Feathering */
+.hero-video-container {
+  height: 940px;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 85%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 85%);
+}
+
+.hero-video-fade {
+  background: linear-gradient(to bottom, rgba(5, 5, 7, 0.25) 0%, transparent 25%, rgba(5, 5, 7, 0.75) 68%, #050507 90%, #050507 100%);
+}
+
 /* Button & Pill Micro-Interactions */
 button {
   cursor: pointer;

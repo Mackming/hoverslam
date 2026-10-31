@@ -95,13 +95,13 @@
   <!-- Hero Section (Atmospheric, Centered, High-Craft Typographic Hierarchy) -->
   <main class="relative z-10">
 
-    <!-- Hero Animated Video Atmosphere (Full Viewport Width) -->
-    <div class="absolute inset-x-0 top-0 w-full h-[780px] pointer-events-none overflow-hidden z-0 select-none opacity-50 mix-blend-screen">
+    <!-- Hero Animated Video Atmosphere (Full Viewport Width with Seamless Void Mask) -->
+    <div class="hero-video-container absolute inset-x-0 top-0 w-full pointer-events-none overflow-hidden z-0 select-none opacity-50 mix-blend-screen">
       <video autoplay muted loop playsinline class="w-full h-full object-cover">
         <source src="hero-bg.mp4" type="video/mp4">
       </video>
-      <!-- Seamless Gradient Fades into Deep Void -->
-      <div class="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void"></div>
+      <!-- Seamless Feathered Fades into Deep Void -->
+      <div class="hero-video-fade absolute inset-0"></div>
     </div>
 
     <section class="relative z-10 max-w-5xl mx-auto px-6 pt-28 sm:pt-36 pb-20 text-center">

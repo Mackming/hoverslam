@@ -1,0 +1,11 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hoverslam Brandmark: The Horizon "H" Monogram -->
+  <!-- Left Vertical Pillar with 45° aerodynamic chamfer -->
+  <path d="M16 18L22 12H26V52H16V18Z" fill="#ffffff"/>
+  <!-- Right Vertical Pillar with 45° aerodynamic chamfer -->
+  <path d="M48 18L42 12H38V52H48V18Z" fill="#ffffff"/>
+  <!-- Extended Drone Ship Landing Deck Crossbar -->
+  <rect x="10" y="32" width="44" height="6" rx="2" fill="#ffffff"/>
+  <!-- Central Coordinate Datum Point -->
+  <circle cx="32" cy="35" r="2.2" fill="#38bdf8"/>
+</svg>

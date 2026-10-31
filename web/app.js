@@ -1,6 +1,6 @@
 /**
  * HOVERSLAM // UI Interactivity & Control Bindings
- * Aesthetic: Stark Monochrome + Electric Volt (#d4ff00)
+ * Aesthetic: Silent, Mathematical, Exact
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,16 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnAuto && btnManual) {
     btnAuto.addEventListener("click", () => {
       sim.setMode("auto");
-      btnAuto.className = "px-2.5 py-1 rounded bg-volt text-black font-bold transition-all";
-      btnManual.className = "px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all";
-      if (modeLabel) modeLabel.textContent = "AUTOPILOT (PPO)";
+      btnAuto.className = "px-3 py-1 rounded-full bg-white text-black font-medium transition-all";
+      btnManual.className = "px-3 py-1 rounded-full text-zinc-400 hover:text-white transition-all";
+      if (modeLabel) modeLabel.textContent = "Autopilot (PPO)";
     });
 
     btnManual.addEventListener("click", () => {
       sim.setMode("manual");
-      btnManual.className = "px-2.5 py-1 rounded bg-white text-black font-bold transition-all";
-      btnAuto.className = "px-2.5 py-1 rounded text-zinc-400 hover:text-white transition-all";
-      if (modeLabel) modeLabel.textContent = "MANUAL PILOT (KEYBOARD)";
+      btnManual.className = "px-3 py-1 rounded-full bg-white text-black font-medium transition-all";
+      btnAuto.className = "px-3 py-1 rounded-full text-zinc-400 hover:text-white transition-all";
+      if (modeLabel) modeLabel.textContent = "Manual Pilot (Keyboard)";
     });
   }
 
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnTogglePad.addEventListener("click", () => {
       const active = sim.togglePadDrift();
       labelPadDrift.textContent = active ? "ON" : "OFF";
-      labelPadDrift.className = active ? "text-volt font-bold" : "text-zinc-500 font-bold";
+      labelPadDrift.className = active ? "text-white font-medium" : "text-zinc-500 font-medium";
     });
   }
 
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnToggleWind.addEventListener("click", () => {
       const active = sim.toggleWindGusts();
       labelWind.textContent = active ? "ON" : "OFF";
-      labelWind.className = active ? "text-volt font-bold" : "text-zinc-500 font-bold";
+      labelWind.className = active ? "text-white font-medium" : "text-zinc-500 font-medium";
     });
   }
 
@@ -78,12 +78,10 @@ document.addEventListener("DOMContentLoaded", () => {
       currentEvoStep = step;
 
       evoCards.forEach((c) => {
-        c.classList.remove("active-evo", "border-volt", "bg-volt/5", "shadow-volt");
-        c.classList.add("border-zincborder", "bg-surface");
+        c.classList.remove("active-evo");
       });
 
-      card.classList.add("active-evo", "border-volt", "bg-volt/5", "shadow-volt");
-      card.classList.remove("border-zincborder", "bg-surface");
+      card.classList.add("active-evo");
 
       const d = evoData[step];
       if (evoRate) evoRate.textContent = d.rate;
@@ -103,29 +101,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
-  // 4. Developer Terminal Command Tabs
-  const cliTabs = document.querySelectorAll(".cli-tab");
-  const cliPanels = document.querySelectorAll(".cli-panel");
-
-  cliTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const targetId = tab.getAttribute("data-target");
-      if (!targetId) return;
-
-      cliTabs.forEach((t) => {
-        t.className = "cli-tab px-3 py-1.5 rounded text-zinc-400 hover:text-white";
-      });
-      tab.className = "cli-tab px-3 py-1.5 rounded bg-zinc-800 text-volt font-bold border border-zinc-700";
-
-      cliPanels.forEach((panel) => {
-        if (panel.id === targetId) {
-          panel.classList.remove("hidden");
-        } else {
-          panel.classList.add("hidden");
-        }
-      });
-    });
-  });
-
 });

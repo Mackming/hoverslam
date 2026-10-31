@@ -1,6 +1,6 @@
 /**
- * HOVERSLAM // Real-time Kinematic Physics & Autopilot Engine
- * Aesthetic: Stark Monochrome + Electric Volt (#d4ff00)
+ * HOVERSLAM // Real-time In-Browser Kinematic Physics & Autopilot Engine
+ * Aesthetic: Silent, Mathematical, Exact
  */
 
 (function () {
@@ -35,7 +35,7 @@
 
   // Simulator State
   const sim = {
-    mode: "auto", // "auto" or "manual"
+    mode: "auto",
     checkpoint: "3000k",
     padDrift: true,
     windGusts: false,
@@ -58,7 +58,7 @@
     mainThrottle: 0.0,
     sideThrottle: 0.0,
 
-    // Episode & Outcome
+    // Status
     landed: false,
     crashed: false,
     grounded: false,
@@ -67,26 +67,25 @@
     shakeX: 0,
     shakeY: 0,
 
-    // Contacts
+    // Gear
     legLeftContact: false,
     legRightContact: false,
 
-    // Visual particles
     particles: [],
     stars: []
   };
 
-  // Generate minimalist starfield
-  for (let i = 0; i < 80; i++) {
+  // Subtle starfield
+  for (let i = 0; i < 75; i++) {
     sim.stars.push({
       x: Math.random() * WORLD_W,
-      y: Math.random() * (WORLD_H - 100),
-      r: Math.random() * 1.2 + 0.4,
-      alpha: Math.random() * 0.5 + 0.2
+      y: Math.random() * (WORLD_H - 120),
+      r: Math.random() * 1.0 + 0.4,
+      alpha: Math.random() * 0.4 + 0.15
     });
   }
 
-  // Keyboard state for Manual Flight
+  // Keyboard controls for manual pilot
   const keys = { ArrowUp: false, ArrowLeft: false, ArrowRight: false };
 
   window.addEventListener("keydown", (e) => {
@@ -106,11 +105,11 @@
   });
 
   function resetRocket() {
-    sim.x = 220.0 + Math.random() * 360.0;
+    sim.x = 240.0 + Math.random() * 320.0;
     sim.y = 490.0 + Math.random() * 60.0;
-    sim.vx = (Math.random() - 0.5) * 4.0;
-    sim.vy = -Math.random() * 5.0;
-    sim.angle = (Math.random() - 0.5) * 0.12;
+    sim.vx = (Math.random() - 0.5) * 3.5;
+    sim.vy = -Math.random() * 4.0;
+    sim.angle = (Math.random() - 0.5) * 0.10;
     sim.angularVel = 0.0;
     sim.fuel = 100.0;
 
@@ -124,14 +123,13 @@
     sim.legLeftContact = false;
     sim.legRightContact = false;
 
-    sim.padX = WORLD_W / 2.0 + (Math.random() - 0.5) * 100.0;
+    sim.padX = WORLD_W / 2.0 + (Math.random() - 0.5) * 90.0;
     sim.padDir = Math.random() < 0.5 ? 1.0 : -1.0;
     sim.padVx = sim.padDir * PAD_MOVE_SPEED;
 
     hideVerdict();
   }
 
-  // Autonomous Guidance Controller (Simulates PPO Policy)
   function computeAutopilotControls() {
     if (sim.landed || sim.crashed) {
       return { main: 0.0, side: 0.0 };
@@ -139,7 +137,6 @@
 
     const altitude = sim.y - PAD_HEIGHT;
     const targetX = sim.padX;
-    const dx = sim.x - targetX;
 
     if (sim.checkpoint === "100k") {
       const main = Math.random() > 0.35 ? 0.95 : 0.05;
@@ -154,39 +151,48 @@
       return { main: Math.max(0, Math.min(1, main)), side: Math.max(-1, Math.min(1, side)) };
     }
 
-    // 1.5M and 3.0M (Master Policy): High-Performance Dynamic Intercept
-    const timeToTouchdown = Math.max(0.4, Math.abs(altitude / Math.min(-1.0, sim.vy)));
-    const predictedPadX = sim.padX + (sim.padDrift ? sim.padVx * timeToTouchdown * 0.85 : 0);
-    const leadDx = sim.x - predictedPadX;
+    // 1.5M and 3.0M (Master Policy)
+    // Continuous trajectory guidance: keep booster on glideslope toward moving deck
+    const dx = sim.x - sim.padX;
+    const targetVx = sim.padDrift ? sim.padVx : 0.0;
+    const dvx = sim.vx - targetVx;
 
     let targetAngle = 0.0;
-    if (altitude > 50.0) {
-      targetAngle = Math.max(-0.24, Math.min(0.24, -leadDx * 0.003 - (sim.vx - sim.padVx) * 0.035));
+    if (altitude > 35.0) {
+      // Tilt right (positive angle) when dx < 0 to steer right; tilt left when dx > 0
+      targetAngle = Math.max(-0.25, Math.min(0.25, -dx * 0.0035 - dvx * 0.038));
     } else {
-      targetAngle = Math.max(-0.05, Math.min(0.05, -leadDx * 0.002));
+      // Final 35m: enforce vertical touchdown alignment
+      const blend = Math.max(0.0, (altitude - 6.0) / 29.0);
+      targetAngle = Math.max(-0.04, Math.min(0.04, -dx * 0.001 - dvx * 0.02)) * blend;
     }
 
     const angleErr = sim.angle - targetAngle;
-    let side = -angleErr * 8.5 - sim.angularVel * 2.3;
+    let side = -angleErr * 9.0 - sim.angularVel * 2.8;
     side = Math.max(-1.0, Math.min(1.0, side));
 
-    // Suicide Burn Altitude: s = v^2 / 2a
-    const availableDecel = MAIN_ENGINE_POWER - Math.abs(GRAVITY);
-    const criticalDecelAlt = (sim.vy * sim.vy) / (2.0 * availableDecel * 0.93);
+    // Controlled descent rate & final hoverslam deceleration
+    const availableDecel = MAIN_ENGINE_POWER - Math.abs(GRAVITY); // 81 m/s^2
+    let desiredVy = -32.0;
 
-    let main = 0.0;
-    if (altitude <= criticalDecelAlt + 10.0) {
-      const targetVy = -Math.min(26.0, Math.sqrt(Math.max(0.5, 2.0 * availableDecel * Math.max(0.0, altitude - 2.0))));
-      const vyErr = targetVy - sim.vy;
-      main = (Math.abs(GRAVITY) + vyErr * 3.6) / MAIN_ENGINE_POWER;
-      main = Math.max(0.15, Math.min(1.0, main));
-    } else if (altitude < 100.0 && sim.vy < -22.0) {
-      main = 0.45;
+    if (altitude < 120.0) {
+      // Suicide burn braking curve converging to -1.0 m/s
+      desiredVy = -Math.max(1.0, Math.sqrt(2.0 * availableDecel * 0.78 * Math.max(0.2, altitude - 1.5)));
+      desiredVy = Math.max(-32.0, desiredVy);
     }
 
+    if (altitude < 10.0) {
+      desiredVy = -1.1;
+    }
+
+    const vyErr = desiredVy - sim.vy;
+    let main = (Math.abs(GRAVITY) + vyErr * 4.2) / MAIN_ENGINE_POWER;
+    main = Math.max(0.12, Math.min(1.0, main));
+
     if (altitude < 8.0) {
-      if (sim.vy < -1.8) main = 0.85;
-      else main = Math.abs(GRAVITY) / MAIN_ENGINE_POWER;
+      if (sim.vy < -1.8) main = 0.92;
+      else if (sim.vy > -0.4) main = 0.18;
+      else main = (Math.abs(GRAVITY) - 1.0) / MAIN_ENGINE_POWER;
     }
 
     return { main, side };
@@ -227,12 +233,12 @@
 
     let windForce = 0.0;
     if (sim.windGusts) {
-      windForce = Math.sin(Date.now() * 0.003) * 7.0;
+      windForce = Math.sin(Date.now() * 0.003) * 6.5;
     }
 
     if (!sim.grounded) {
       const thrust = sim.mainThrottle * MAIN_ENGINE_POWER;
-      const ax = -thrust * Math.sin(sim.angle) + windForce;
+      const ax = thrust * Math.sin(sim.angle) + windForce;
       const ay = thrust * Math.cos(sim.angle) + GRAVITY;
 
       sim.vx = (sim.vx + ax * DT) * LINEAR_DAMPING;
@@ -290,12 +296,12 @@
         sim.angularVel = 0;
         sim.angle *= 0.2;
         showVerdict(true, speed, sim.angle);
-        spawnDustKickup(sim.x, PAD_HEIGHT, 40);
+        spawnDustKickup(sim.x, PAD_HEIGHT, 35);
       } else {
         sim.crashed = true;
         sim.landed = false;
-        sim.screenShake = 16.0;
-        showVerdict(false, speed, sim.angle, !isOverDeck ? "MISSED DRONE SHIP" : (speed > MAX_IMPACT_SPEED ? "EXCESSIVE IMPACT VELOCITY" : "TOPPLE OVERSTABILITY"));
+        sim.screenShake = 14.0;
+        showVerdict(false, speed, sim.angle, !isOverDeck ? "Off-deck contact" : (speed > MAX_IMPACT_SPEED ? "Impact velocity overload" : "Topple instability"));
         spawnCrashFireball(sim.x, Math.max(PAD_HEIGHT, sim.y));
       }
     }
@@ -304,7 +310,6 @@
   function spawnParticles() {
     if (sim.crashed) return;
 
-    // Main Engine Exhaust: Electric Volt & White Sparks
     if (sim.mainThrottle > 0.05) {
       const nozzleX = sim.x + Math.sin(sim.angle) * (ROCKET_HEIGHT / 2.0);
       const nozzleY = sim.y - Math.cos(sim.angle) * (ROCKET_HEIGHT / 2.0);
@@ -324,12 +329,11 @@
           life: 0.3 + Math.random() * 0.2,
           maxLife: 0.5,
           size: 2.0 + Math.random() * 3.5,
-          color: Math.random() < 0.4 ? "#d4ff00" : (Math.random() < 0.7 ? "#ffffff" : "#71717a")
+          color: Math.random() < 0.6 ? "#ededed" : "#71717a"
         });
       }
     }
 
-    // Cold-Gas RCS: Crisp White Mist
     if (Math.abs(sim.sideThrottle) > 0.05) {
       const side = sim.sideThrottle > 0 ? 1 : -1;
       const portX = sim.x + side * (ROCKET_WIDTH / 2.0);
@@ -344,7 +348,7 @@
           life: 0.18 + Math.random() * 0.12,
           maxLife: 0.3,
           size: 1.5 + Math.random() * 1.5,
-          color: "#ffffff"
+          color: "#a1a1aa"
         });
       }
     }
@@ -368,9 +372,9 @@
   }
 
   function spawnCrashFireball(x, y) {
-    for (let i = 0; i < 65; i++) {
+    for (let i = 0; i < 60; i++) {
       const ang = Math.random() * Math.PI * 2;
-      const spd = 30.0 + Math.random() * 130.0;
+      const spd = 30.0 + Math.random() * 120.0;
       sim.particles.push({
         x: x,
         y: y,
@@ -378,8 +382,8 @@
         vy: Math.sin(ang) * spd,
         life: 0.4 + Math.random() * 0.8,
         maxLife: 1.2,
-        size: 2.5 + Math.random() * 5.0,
-        color: Math.random() < 0.4 ? "#ffffff" : (Math.random() < 0.8 ? "#d4ff00" : "#27272a")
+        size: 2.5 + Math.random() * 4.5,
+        color: Math.random() < 0.6 ? "#ededed" : "#3f3f46"
       });
     }
   }
@@ -405,11 +409,11 @@
   function render() {
     ctx.clearRect(0, 0, WORLD_W, WORLD_H);
 
-    // Deep Void Black Sky
+    // Void background
     ctx.fillStyle = "#050507";
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // Subtle Stars
+    // Faint stars
     for (const s of sim.stars) {
       ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
       ctx.beginPath();
@@ -417,11 +421,11 @@
       ctx.fill();
     }
 
-    // Ocean Waterline
+    // Waterline
     const oceanLevel = toScreen(0, 0).y;
-    ctx.fillStyle = "#0c0d12";
+    ctx.fillStyle = "#08090d";
     ctx.fillRect(0, oceanLevel, WORLD_W, WORLD_H - oceanLevel);
-    ctx.strokeStyle = "#27272a";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(0, oceanLevel);
@@ -439,31 +443,27 @@
     const padW = PAD_HALF_WIDTH * 2;
     const deckH = 14;
 
-    // Drone Ship Deck
-    ctx.fillStyle = "#12131a";
+    ctx.fillStyle = "#0f1118";
     ctx.fillRect(padTop.x - PAD_HALF_WIDTH, padTop.y, padW, deckH);
-    ctx.strokeStyle = "#3f3f46";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
     ctx.lineWidth = 1;
     ctx.strokeRect(padTop.x - PAD_HALF_WIDTH, padTop.y, padW, deckH);
 
-    // Electric Volt Landing Target & Crosshair
-    ctx.strokeStyle = "rgba(212, 255, 0, 0.4)";
-    ctx.lineWidth = 1.5;
+    // Subtle landing crosshair
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(padTop.x, padTop.y + 7, 22, 0, Math.PI * 2);
+    ctx.arc(padTop.x, padTop.y + 7, 20, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Center Cross
-    ctx.strokeStyle = "#d4ff00";
     ctx.beginPath();
-    ctx.moveTo(padTop.x - 6, padTop.y + 7);
-    ctx.lineTo(padTop.x + 6, padTop.y + 7);
-    ctx.moveTo(padTop.x, padTop.y + 1);
-    ctx.lineTo(padTop.x, padTop.y + 13);
+    ctx.moveTo(padTop.x - 5, padTop.y + 7);
+    ctx.lineTo(padTop.x + 5, padTop.y + 7);
+    ctx.moveTo(padTop.x, padTop.y + 2);
+    ctx.lineTo(padTop.x, padTop.y + 12);
     ctx.stroke();
 
-    // Support Pylons
-    ctx.fillStyle = "#18181b";
+    ctx.fillStyle = "#12141d";
     ctx.fillRect(padTop.x - PAD_HALF_WIDTH + 8, padTop.y + deckH, 8, WORLD_H - padTop.y);
     ctx.fillRect(padTop.x + PAD_HALF_WIDTH - 16, padTop.y + deckH, 8, WORLD_H - padTop.y);
   }
@@ -485,14 +485,14 @@
     const halfW = ROCKET_WIDTH / 2.0;
     const halfH = ROCKET_HEIGHT / 2.0;
 
-    // Rocket Body (Stark White Titanium)
+    // Body
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(-halfW, -halfH, ROCKET_WIDTH, ROCKET_HEIGHT);
     ctx.strokeStyle = "#27272a";
     ctx.lineWidth = 1;
     ctx.strokeRect(-halfW, -halfH, ROCKET_WIDTH, ROCKET_HEIGHT);
 
-    // Carbon Nosecone
+    // Nosecone
     ctx.fillStyle = "#ededed";
     ctx.beginPath();
     ctx.moveTo(-halfW, -halfH);
@@ -501,11 +501,9 @@
     ctx.closePath();
     ctx.fill();
 
-    // Matte Black Interstage Band with Electric Volt Trim
-    ctx.fillStyle = "#0c0d12";
+    // Dark interstage band
+    ctx.fillStyle = "#18181b";
     ctx.fillRect(-halfW, -halfH + 4, ROCKET_WIDTH, 5);
-    ctx.fillStyle = "#d4ff00";
-    ctx.fillRect(-halfW, -halfH + 9, ROCKET_WIDTH, 1.5);
 
     // Engine Nozzle
     ctx.fillStyle = "#27272a";
@@ -519,7 +517,7 @@
 
     // Landing Legs
     ctx.strokeStyle = "#a1a1aa";
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.0;
 
     ctx.beginPath();
     ctx.moveTo(-halfW + 1, halfH - 4);
@@ -549,7 +547,7 @@
 
   function renderCrosshairs() {
     const padTop = toScreen(sim.padX, PAD_HEIGHT);
-    ctx.strokeStyle = "rgba(212, 255, 0, 0.2)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 4]);
 
@@ -568,16 +566,11 @@
     const elPitch = document.getElementById("hud-pitch");
     const elThrottleBar = document.getElementById("hud-throttle-bar");
     const elThrottleVal = document.getElementById("hud-throttle-val");
-    const elLegL = document.getElementById("hud-leg-left");
-    const elLegR = document.getElementById("hud-leg-right");
     const elPadVx = document.getElementById("hud-pad-vx");
 
     const alt = Math.max(0, sim.y - PAD_HEIGHT);
     if (elAlt) elAlt.textContent = `${alt.toFixed(1)} m`;
-    if (elVy) {
-      elVy.textContent = `${sim.vy >= 0 ? "+" : ""}${sim.vy.toFixed(1)} m/s`;
-      elVy.className = sim.vy < -25 ? "text-white font-bold" : (sim.vy < -12 ? "text-zinc-400 font-bold" : "text-volt font-bold");
-    }
+    if (elVy) elVy.textContent = `${sim.vy >= 0 ? "+" : ""}${sim.vy.toFixed(1)} m/s`;
     if (elVx) elVx.textContent = `${sim.vx >= 0 ? "+" : ""}${sim.vx.toFixed(1)} m/s`;
 
     const pitchDeg = (sim.angle * 180 / Math.PI).toFixed(1);
@@ -587,8 +580,6 @@
     if (elThrottleBar) elThrottleBar.style.width = `${throttlePct}%`;
     if (elThrottleVal) elThrottleVal.textContent = `${throttlePct}%`;
 
-    if (elLegL) elLegL.style.backgroundColor = sim.legLeftContact ? "#d4ff00" : "#27272a";
-    if (elLegR) elLegR.style.backgroundColor = sim.legRightContact ? "#d4ff00" : "#27272a";
     if (elPadVx) elPadVx.textContent = `${sim.padDrift ? Math.abs(sim.padVx).toFixed(1) : "0.0"} m/s`;
   }
 
@@ -600,13 +591,13 @@
 
     elVerdict.classList.remove("hidden");
     if (success) {
-      elVerdict.className = "mx-auto py-2 px-6 rounded border text-center backdrop-blur-md bg-black/80 border-volt text-volt shadow-volt";
-      elTitle.textContent = "NOMINAL TOUCHDOWN // HOVERSLAM LOCKED";
-      elSub.textContent = `Sink Rate: ${speed.toFixed(1)} m/s | Tilt: ${(angle * 180 / Math.PI).toFixed(1)}° | Quality: +148.5`;
+      elVerdict.className = "mx-auto py-2 px-5 rounded-full border text-center backdrop-blur-md bg-black/80 border-white/20 text-white";
+      elTitle.textContent = "Touchdown confirmed";
+      elSub.textContent = `${speed.toFixed(1)} m/s at touch · ${(angle * 180 / Math.PI).toFixed(1)}° pitch`;
     } else {
-      elVerdict.className = "mx-auto py-2 px-6 rounded border text-center backdrop-blur-md bg-black/80 border-white/40 text-white";
-      elTitle.textContent = "MISSION ABORT // STRUCTURAL OVERLOAD";
-      elSub.textContent = reason || `Impact: ${speed.toFixed(1)} m/s (Limit: ${MAX_IMPACT_SPEED} m/s)`;
+      elVerdict.className = "mx-auto py-2 px-5 rounded-full border text-center backdrop-blur-md bg-black/80 border-zinc-700 text-zinc-300";
+      elTitle.textContent = "Flight terminated";
+      elSub.textContent = reason || `${speed.toFixed(1)} m/s impact`;
     }
   }
 

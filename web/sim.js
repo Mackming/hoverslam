@@ -609,14 +609,42 @@
     if (elVerdict) elVerdict.classList.add("hidden");
   }
 
+  let isSimVisible = true;
+  let animId = null;
+
   function loop() {
+    if (!isSimVisible || document.hidden) {
+      animId = null;
+      return;
+    }
     stepPhysics();
     render();
-    requestAnimationFrame(loop);
+    animId = requestAnimationFrame(loop);
   }
 
+  function startLoop() {
+    if (!animId && isSimVisible && !document.hidden) {
+      animId = requestAnimationFrame(loop);
+    }
+  }
+
+  // Optimize CPU/battery: pause physics/rendering when canvas is off-screen
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isSimVisible = entry.isIntersecting;
+        if (isSimVisible) startLoop();
+      });
+    }, { threshold: 0.05 });
+    observer.observe(canvas);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && isSimVisible) startLoop();
+  });
+
   resetRocket();
-  requestAnimationFrame(loop);
+  startLoop();
 
   window.HoverslamSim = {
     reset: resetRocket,

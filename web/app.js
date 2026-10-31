@@ -120,4 +120,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderMath();
   window.addEventListener("load", renderMath);
+
+  // 5. Battery & CPU Optimization: Pause hero video when scrolled past
+  const heroVideo = document.querySelector(".hero-video-container video");
+  if (heroVideo && "IntersectionObserver" in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          heroVideo.play().catch(() => {});
+        } else {
+          heroVideo.pause();
+        }
+      });
+    }, { threshold: 0.05 });
+    videoObserver.observe(heroVideo);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) heroVideo.pause();
+      else heroVideo.play().catch(() => {});
+    });
+  }
 });
